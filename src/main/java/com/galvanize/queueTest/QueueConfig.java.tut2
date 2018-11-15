@@ -1,0 +1,35 @@
+package com.galvanize.queueTest;
+
+import org.springframework.amqp.core.Queue;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+
+@Profile({"queueTest","work_queues"})
+@Configuration
+public class QueueConfig {
+
+    @Bean
+    public Queue hello() {
+        return new Queue("hello");
+    }
+
+    @Profile("receiver")
+    public static class ReceiverConig {
+        @Bean
+        public QueueReceiver receiver1() {
+            return new QueueReceiver(1);
+        }
+
+        @Bean
+        public QueueReceiver receiver2() {
+            return new QueueReceiver(2);
+        }
+    }
+
+    @Profile("sender")
+    @Bean
+    public QueueTestSender sender() {
+        return new QueueTestSender();
+    }
+}
